@@ -1,11 +1,8 @@
 import streamlit as st
-import numpy as np
 import os
 import sys
 import platform
 import socket as sckt
-import requests
-import json
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_gigachat.chat_models import GigaChat
 
