@@ -36,19 +36,3 @@ messages = [
     )
 ]
 
-st.title(":green[_GigaChat_] & :blue[_Streamlit_] :red[are Great!] :sunglasses:")
-st.write(f"mode: :blue[{type_host}] host: :blue[{hostname}] OS: :blue[{plat}] model: :red[{gc_model}] zone: :green[{type_giga_access}]")
-
-with st.container(border=True):
-    sys_prompt = st.text_area("системный промпт", sys_prompt)
-    user_input = ''
-    user_input = st.chat_input("введите свой вопрос",  key="uinput", max_chars=4096)
-    if user_input is None:
-        user_input = "Привет GigaChat!"
-    print(f"user_input: [{user_input}]" ,flush=True)
-    messages.append(HumanMessage(content=user_input))
-    res = chat.invoke(messages)
-    messages.append(res)
-    print("Bot: ", res.content)
-    dialog = st.text_area("диалог с ботом", f"System: {sys_prompt}\nYou: {user_input}\nBot: {res.content}\n", key="dlg")
-
