@@ -3,6 +3,8 @@ import socket as sckt
 import streamlit as st
 from openai import OpenAI
 # from langchain import OpenAI
+# published on https://psegpt.streamlit.app/
+# admin on https://share.streamlit.io/
 
 hostname = sckt.gethostname()
 plat = platform.system()

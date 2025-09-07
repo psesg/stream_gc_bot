@@ -3,7 +3,8 @@ import socket as sckt
 import streamlit as st
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from langchain_gigachat.chat_models import GigaChat
-
+# published on https://psegiga.streamlit.app/
+# admin on https://share.streamlit.io/
 
 credentials = st.secrets["my_api_key"]
 gc_model = "GigaChat-2-Pro"
