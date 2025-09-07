@@ -1,19 +1,29 @@
+import platform
+import socket as sckt
 import streamlit as st
 from openai import OpenAI
 # from langchain import OpenAI
 
-st.title("ChatGPT-like clone")
+hostname = sckt.gethostname()
+plat = platform.system()
+gc_model = "gpt-4o"   # "gpt-3.5-turbo"
+st.title(":green[_ChatGPT_] & :blue[_Streamlit_] :red[are Great!] :sunglasses:")
+st.write(f"host: :blue[{hostname}] OS: :blue[{plat}] model: :red[{gc_model}]")
+# st.title("ChatGPT-like clone")
 
 # Set OpenAI API key from Streamlit secrets
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Set a default model
+
 if "openai_model" not in st.session_state:
-    st.session_state["openai_model"] = "gpt-3.5-turbo"
+    st.session_state["openai_model"] = gc_model
 
 # Initialize chat history
+sys_prompt = "Ты эмпатичный эксперт в области больших языковых моделей (LLM) и разработки программного обеспечения на языке Python, который помогает пользователю решить его проблемы и объясняет, как писать код. Давай ответы на русском языке."
 if "messages" not in st.session_state:
     st.session_state.messages = []
+    st.session_state.messages.append({"role": "system", "content": sys_prompt})
 
 # Display chat messages from history on app rerun
 for message in st.session_state.messages:
