@@ -18,12 +18,21 @@ class StreamHandler(BaseCallbackHandler):
 credentials = st.secrets["my_api_key"]
 gc_model = "GigaChat-2-Pro"
 url_tok = "https://ngw.devices.sberbank.ru:9443/api/v2/oauth"
-type_giga_access = 'ENABLER'
 
 hostname = sckt.gethostname()
 plat = platform.system()
+
 st.title(":green[_GigaChatStr_] & :blue[_Streamlit_] :red[are Great!] :sunglasses:")
-st.write(f"host: :blue[{hostname}] OS: :blue[{plat}] model: :red[{gc_model}] zone: :green[{type_giga_access}]")
+st.write(f"host: :blue[{hostname}] OS: :blue[{plat}] model: :red[{gc_model}]")
+
+rag_mode = False
+rag_mode = st.checkbox("RAG", value=False)
+if rag_mode:
+    rag_mode = True
+else:
+    rag_mode = False
+rag_str = "RAG is On" if rag_mode  else "RAG is Off"
+st.write(rag_str)
 
 # Set a default model
 if "ai_model" not in st.session_state:
