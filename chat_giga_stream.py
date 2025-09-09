@@ -22,17 +22,15 @@ url_tok = "https://ngw.devices.sberbank.ru:9443/api/v2/oauth"
 hostname = sckt.gethostname()
 plat = platform.system()
 
-st.title(":green[_GigaChatStr_] & :blue[_Streamlit_] :red[are Great!] :sunglasses:")
+st.title(":green[_GigaChatStr_] & :blue[_Streamlit_] :red[are Great!]")
 st.write(f"host: :blue[{hostname}] OS: :blue[{plat}] model: :red[{gc_model}]")
 
-rag_mode = False
-rag_mode = st.checkbox("RAG", value=False)
+rag_mode = st.checkbox("RAG", value=False, help="включить/выключить RAG")
 if rag_mode:
     rag_mode = True
 else:
     rag_mode = False
-rag_str = "RAG is On" if rag_mode  else "RAG is Off"
-st.write(rag_str)
+st.write("RAG is On" if rag_mode  else "RAG is Off")
 
 # Set a default model
 if "ai_model" not in st.session_state:
@@ -53,10 +51,10 @@ for message in st.session_state.messages:
 if prompt := st.chat_input("What is up?"):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
+
     # Display user message in chat message container
     with st.chat_message("user"):
         st.markdown(prompt)
-# All that's changed is that we've added a default model to st.session_state and set our OpenAI API key from Streamlit secrets. Here's where it gets interesting. We can replace our emulated stream with the model's responses from OpenAI:
 
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
@@ -74,8 +72,6 @@ if prompt := st.chat_input("What is up?"):
             for m in st.session_state.messages
         ]
         stream_resp = chat.stream(messages)
-        # print(resp)
-        # st.write(resp)
         response = st.write_stream(stream_resp)
     st.session_state.messages.append({"role": "assistant", "content": response})
 
