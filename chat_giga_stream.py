@@ -1,12 +1,37 @@
-import platform
-import socket as sckt
+# -*- coding: utf-8 -*-
+
+import os
+import sys
 import streamlit as st
-from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
+import logging
+# from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from langchain_gigachat.chat_models import GigaChat
 from langchain.callbacks.base import BaseCallbackHandler
+from giga_util import get_giga_credentials, get_giga_url_access_mode
 
 # published on https://psegiga.streamlit.app/
 # admin on https://share.streamlit.io/
+
+# set logging level - for logging to file add: filename='myapp.log',
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+if not sys.warnoptions:
+    import warnings
+    warnings.simplefilter("ignore") # default Change the filter in this process
+    os.environ["PYTHONWARNINGS"] = "ignore" # ignore Also affect subprocesses
+
+# get credentials from переменной окружения `GIGACHAT_CREDENTIALS`
+credentials = get_giga_credentials()
+if credentials == '':
+    exit(1)
+
+# get url_oauth and access_mode
+url_oauth, access_mode = get_giga_url_access_mode()
+type_host = access_mode['type_host']
+type_giga_access = access_mode['type_giga_access']
+hostname = access_mode['hostname']
+plat = access_mode['plat']
 
 class StreamHandler(BaseCallbackHandler):
     def __init__(self, initial_text=""):
@@ -15,12 +40,7 @@ class StreamHandler(BaseCallbackHandler):
     def on_llm_new_token(self, token: str, **kwargs) -> None:
         print(f"{token}", end="", flush=True)
 
-credentials = st.secrets["my_api_key"]
 gc_model = "GigaChat-2-Pro"
-url_tok = "https://ngw.devices.sberbank.ru:9443/api/v2/oauth"
-
-hostname = sckt.gethostname()
-plat = platform.system()
 
 st.title(":green[_GigaChatStr_] & :blue[_Streamlit_] :red[are Great!]")
 st.write(f"host: :blue[{hostname}] OS: :blue[{plat}] model: :red[{gc_model}]")
@@ -63,7 +83,7 @@ if prompt := st.chat_input("What is up?"):
                         credentials=credentials,
                         verify_ssl_certs=False,
                         scope="GIGACHAT_API_CORP",
-                        auth_url=url_tok,
+                        auth_url=url_oauth,
                         streaming=True,
                         callbacks = [StreamHandler()]
                         )
