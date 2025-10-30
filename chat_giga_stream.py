@@ -2,6 +2,8 @@
 
 import os
 import sys
+from email.policy import default
+
 import streamlit as st
 import logging
 # from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
@@ -42,22 +44,51 @@ class StreamHandler(BaseCallbackHandler):
 
 gc_model = "GigaChat-2-Pro"
 
-st.title(":green[_GigaChatStr_] & :blue[_Streamlit_] :red[are Great!]")
-st.write(f"host: :blue[{hostname}] OS: :blue[{plat}] model: :red[{gc_model}]")
-
-rag_mode = st.checkbox("RAG", value=False, help="включить/выключить RAG")
-if rag_mode:
-    rag_mode = True
-else:
-    rag_mode = False
-st.write("RAG is On" if rag_mode  else "RAG is Off")
-
 # Set a default model
 if "ai_model" not in st.session_state:
     st.session_state["ai_model"] = gc_model
 
+st.title(":green[_GigaChatStr_] & :blue[_Streamlit_] :red[are Great!]")
+st.write("**2025.09.22 Panarin S.E. - for project :green[Multimodal RAG system]**")
+st.write(f"host: :blue[{hostname}] OS: :blue[{plat}] model: :red[{gc_model}]")
+
+# включение/выключение RAG и вывод информации о проекте
+rag_mode = True
+if "rag_mode" not in st.session_state:
+    st.session_state["rag_mode"] = True
+    rag_mode = True
+else:
+    rag_mode = st.session_state["rag_mode"]
+
+if "rag_mode" in st.session_state:
+    rag_mode = st.checkbox("Not default system prompt")
+    st.session_state["rag_mode"] = rag_mode
+
+
+if st.button("Reset dialog"):
+    # clear chat history
+    if "messages" in st.session_state:
+        st.session_state.messages.clear()
+
+default_sys_prompt = ("Ты эмпатичный консультант и отвечаешь пользователю"
+                      " на его вопросы")
+if rag_mode:
+    own_sys_prompt = st.text_area(label="enter your system prompt")
+    if own_sys_prompt is None or len(own_sys_prompt) <= 10:
+        own_sys_prompt = default_sys_prompt
+
 # Initialize chat history
-sys_prompt = "Ты эмпатичный эксперт в области больших языковых моделей (LLM) и разработки программного обеспечения на языке Python, который помогает пользователю решить его проблемы и объясняет, как писать код."
+if not rag_mode:
+    sys_prompt = ("Ты эмпатичный эксперт в области больших языковых моделей"
+                  " (LLM) и разработки программного обеспечения на языке"
+                  " Python, который помогает пользователю решить его проблемы"
+                  " и объясняет, как писать код.")
+else:
+    sys_prompt = own_sys_prompt
+
+print(f'sys_prompt = [{sys_prompt}]')
+st.write(f"sys_prompt: :blue[{sys_prompt}]")
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
     st.session_state.messages.append({"role": "system", "content": sys_prompt})
