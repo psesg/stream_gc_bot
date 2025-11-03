@@ -24,11 +24,12 @@ if not sys.warnoptions:
     os.environ["PYTHONWARNINGS"] = "ignore" # ignore Also affect subprocesses
 
 # get credentials from переменной окружения `GIGACHAT_CREDENTIALS`
-credentials = get_giga_credentials()
-if credentials == '':
-    exit(1)
-else:
-    credentials = st.secrets["giga_api_key"]
+credentials = st.secrets["giga_api_key"]
+# credentials = get_giga_credentials()
+# if credentials == '':
+#     exit(1)
+
+
 
 # get url_oauth and access_mode
 url_oauth, access_mode = get_giga_url_access_mode()
