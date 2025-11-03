@@ -45,7 +45,7 @@ class StreamHandler(BaseCallbackHandler):
     def on_llm_new_token(self, token: str, **kwargs) -> None:
         print(f"{token}", end="", flush=True)
 
-gc_model = "GigaChat-2-Pro"
+gc_model = "GigaChat-2-Max" #  "GigaChat-2-Pro"
 
 # Set a default model
 if "ai_model" not in st.session_state:
