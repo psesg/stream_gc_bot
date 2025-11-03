@@ -27,6 +27,8 @@ if not sys.warnoptions:
 credentials = get_giga_credentials()
 if credentials == '':
     exit(1)
+else:
+    credentials = st.secrets["giga_api_key"]
 
 # get url_oauth and access_mode
 url_oauth, access_mode = get_giga_url_access_mode()
